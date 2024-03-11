@@ -25,6 +25,9 @@ import viseme_id_19 from "../Assets/visemes/viseme_id_19.svg";
 import viseme_id_20 from "../Assets/visemes/viseme_id_20.svg";
 import viseme_id_21 from "../Assets/visemes/viseme_id_21.svg";
 
+
+import  bgAvatar from "../Assets/AvatarImages/1.png"
+
 import {useState} from "react";
 
 import FemaleSpeakers from "../configs/femaleSpeakers";
@@ -139,39 +142,23 @@ function Avatar(props: SVGProps<SVGSVGElement>){
   <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
-    width="500"
-    height="500"
+    width="100%"
+    height="100%"
     fill="none"
     viewBox="0 0 1000 1000"
     {...props}
   >
    
-    {/* <defs>
-  
-      <pattern
-        id="avatar_svg__b"
-        width={1}
-        height={1}
-        patternContentUnits="objectBoundingBox"
-      >
-        <use
-          xlinkHref="#avatar_svg__d"
-          transform="matrix(.00096 0 0 .00205 -.002 0)"
-        />
-      </pattern>
-     
-      <image
-        xlinkHref={visemeMap[imageIndex]}
-        id="avatar_svg__d"
-        width={812}
-        height={688}
-      />
-    </defs> */}
+    <image xlinkHref={bgAvatar} width={1000} height={1000} transform="scale(1.7)" x={-204} y={-220}/>
+
           <image
+          transform="scale(1)"
         xlinkHref={visemeMap[imageIndex]}
         id="avatar_svg__d"
-        width={1012}
-        height={888}
+        width={556}
+        height={300}
+        x={220}
+        y={370}
       />
   </svg>
   <button className="button" onClick={handleClick}>Speak</button>
