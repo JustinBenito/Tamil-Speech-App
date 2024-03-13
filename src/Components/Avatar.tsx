@@ -33,9 +33,9 @@ import  bgAvatar from "../Assets/AvatarImages/1.png"
 
 import {useState} from "react";
 
-import FemaleSpeakers from "../configs/femaleSpeakers";
+// import FemaleSpeakers from "../configs/femaleSpeakers";
 
-const config = require("../config.json");
+// const config = require("../config.json");
 
 var visemes_arr:Array<sdk.SpeechSynthesisVisemeEventArgs> = [];
 
