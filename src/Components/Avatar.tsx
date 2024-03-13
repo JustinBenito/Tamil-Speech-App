@@ -3,6 +3,7 @@ import type { SVGProps } from "react";
 import avatar from "../Assets/AvatarImages/1.png";
 import axios from 'axios';
 import './avatar.css'
+import '../index.css'
 import { AudioRecorder } from 'react-audio-voice-recorder';
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
 import viseme_id_0 from "../Assets/visemes/viseme_id_0.svg";
@@ -91,7 +92,7 @@ function Avatar(props: SVGProps<SVGSVGElement>){
           }
         })
         return (
-          <h1 className="text-4xl" style={{color: 'green', marginTop: '10px', fontSize: '32px'}}>
+          <h1 className="fonts text-4xl" style={{color: 'green', marginTop: '10px', fontSize: '32px', fontFamily: 'Noto Sans Tamil'}}>
             {asrText.split('').map((char, index) => (
               <span key={index} style={{color: char !== sentences[0].charAt(index) ? 'red' : 'green', }}>
                 {char}
@@ -233,7 +234,7 @@ function Avatar(props: SVGProps<SVGSVGElement>){
   </svg>
   <button className="button" onClick={handleClick}>Speak</button>
 
-  <h1 className="text-4xl" style={{color: 'black', marginTop: '10px', fontSize: '32px'}}>{sentences[0]}</h1>
+  <h1 className="fonts text-4xl" style={{color: 'black', marginTop: '10px', fontSize: '32px'}}>{sentences[0]}</h1>
   
   {/* {asrText ? <h1 className="text-4xl" style={{color: 'orange', marginTop: '10px', fontSize: '16px'}}>{asrText}</h1> : ''}
    */}

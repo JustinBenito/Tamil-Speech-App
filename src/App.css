@@ -53,3 +53,14 @@
   margin-bottom:20px;
   justify-content: space-around;
 }
+
+.fonts {
+  font-family: 'SunTommy';
+  src: local('SunTommy'), url(../SunTommy.ttf) format('ttf');
+}
+
+@font-face {
+  font-family: 'SunTommy';
+  src: local('SunTommy'), url(../SunTommy.ttf) format('ttf');
+ 
+}
