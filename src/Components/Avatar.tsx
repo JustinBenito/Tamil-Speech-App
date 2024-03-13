@@ -1,6 +1,9 @@
 import * as React from "react";
 import type { SVGProps } from "react";
 import avatar from "../Assets/AvatarImages/1.png";
+import axios from 'axios';
+import './avatar.css'
+import { AudioRecorder } from 'react-audio-voice-recorder';
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
 import viseme_id_0 from "../Assets/visemes/viseme_id_0.svg";
 import viseme_id_1 from "../Assets/visemes/viseme_id_1.svg";
@@ -68,23 +71,52 @@ function Avatar(props: SVGProps<SVGSVGElement>){
    }
 
    
+   
       // define the states
+      const [asrText, setAsrText] = useState<string>("");
       const [imageIndex,setImageIndex] = useState(0);
       const [selectedVoice, setSelectedVoice] = useState<string>("ta-IN-PallaviNeural");
-      const [sentence,setSelectedSentence] = useState<string>("அப்பாவுக்கு");
+      const [sentence,setSelectedSentence] = useState<string>("");
 
       const sentences = [
-        "அப்பாவுக்கு.",
-
+        "சேர்ந்தார்",
        ]
 
+       const renderAsrText = () => {
+
+        asrText.split('').map((char, index) => {
+          if (char !== sentences[0].charAt(index)) {
+            console.log(char, sentences[0].charAt(index))
+           
+          }
+        })
+        return (
+          <h1 className="text-4xl" style={{color: 'green', marginTop: '10px', fontSize: '32px'}}>
+            {asrText.split('').map((char, index) => (
+              <span key={index} style={{color: char !== sentences[0].charAt(index) ? 'red' : 'green', }}>
+                {char}
+              </span>
+            ))}
+          </h1>
+        );
+      //   let highlightedText = "";
+      // for (let i = 0; i < asrText.length; i++) {
+      //   if (asrText[i] !== sentence[i]) {
+      //     highlightedText += `<span style="background-color: red">${asrText[i]}</span>`;
+      //   } else {
+      //     highlightedText += asrText[i];
+      //   }
+      // }
+      // return <h1 className="text-4xl" style={{color: 'orange', marginTop: '10px', fontSize: '16px'}} dangerouslySetInnerHTML={{__html: highlightedText}} />;
+      };
+
        function synthesizeSpeech(){
-        const speechConfig = sdk.SpeechConfig.fromSubscription(config.SpeechKey, config.SpeechRegion);
+        const speechConfig = sdk.SpeechConfig.fromSubscription(process.env.REACT_APP_TOKEN_SPEECH!, process.env.REACT_APP_TOKEN_REGION!);
         const speechSynthesizer = new sdk.SpeechSynthesizer(speechConfig);
     
         const ssml = `<speak version='1.0' xml:lang='en-US' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='http://www.w3.org/2001/mstts'> \r\n \
         <voice name='${selectedVoice}'> \r\n \
-            <prosody rate='slow'> \r\n \
+            <prosody rate='-100%' > \r\n \
                 <mstts:viseme type='redlips_front'/> \r\n \
                 ${sentence} \r\n \
             </prosody> \r\n \
@@ -123,33 +155,71 @@ function Avatar(props: SVGProps<SVGSVGElement>){
        }
 
        const handleClick = ()=>{
-        const randomIndex = Math.floor(Math.random()*sentences.length);
-        setSelectedSentence(sentences[randomIndex]);
+        // const randomIndex = Math.floor(Math.random()*sentences.length);
+        setSelectedSentence(sentences[0]);
         synthesizeSpeech()
         
        }
        const handleVoiceChange= (event:React.ChangeEvent<HTMLSelectElement>)=>{
         setSelectedVoice(event.target.value);
        }
+
+
+       const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+
+       const addAudioElement = (blob: Blob) => {
+         setAudioBlob(blob);
+       };
+     
+      React.useEffect(() => {
+        const sendAudioToAPI = async () => {
+          if (!audioBlob) {
+            console.error('No audio recorded');
+            return;
+          }
+          if (audioBlob){
+          const formData = new FormData();
+    formData.append('file', audioBlob, 'recorded_audio.webm');
+    formData.append('language', 'tamil');
+    formData.append('vtt', 'true');
+
+    try {
+      const response = await axios.post('https://asr.iitm.ac.in/api/asr/', formData, {
+        headers: {
+          Authorization: `Token ${process.env.REACT_APP_TOKEN}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      // console.log(response);
+      // console.log(response.data);
+      setAsrText(response.data.transcript.trim());
+    } catch (error) {
+      console.error('Error uploading audio:', error);
+    }}
+        };
+        sendAudioToAPI();
+      }, [audioBlob]);
+
   return (
-    <div>
-      <div className="options">
+    <div style={{ borderColor: 'black', borderRadius: 10, borderWidth: 2, borderStyle: 'solid', padding: 10}}>
+      {/* <div className="options">
     <select value={selectedVoice} onChange={handleVoiceChange}>
      
     {FemaleSpeakers.map((voice) => <option value={voice.value}>{voice.label}</option>)}
     </select>
-    </div>
+    </div> */}
   <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
     width="100%"
     height="100%"
+    className="avatar-container-circle"
     fill="none"
     viewBox="0 0 1000 1000"
     {...props}
   >
    
-    <image xlinkHref={bgAvatar} width={1000} height={1000} transform="scale(1.7)" x={-204} y={-220}/>
+    <image xlinkHref={bgAvatar} width={1000} height={1000}  transform="scale(1.7)" x={-204} y={-220}/>
 
           <image
           transform="scale(1)"
@@ -163,7 +233,28 @@ function Avatar(props: SVGProps<SVGSVGElement>){
   </svg>
   <button className="button" onClick={handleClick}>Speak</button>
 
-  <h1 className="text-black" style={{color: 'black'}}>{sentences[0]}</h1>
+  <h1 className="text-4xl" style={{color: 'black', marginTop: '10px', fontSize: '32px'}}>{sentences[0]}</h1>
+  
+  {/* {asrText ? <h1 className="text-4xl" style={{color: 'orange', marginTop: '10px', fontSize: '16px'}}>{asrText}</h1> : ''}
+   */}
+
+{asrText ? renderAsrText() : ''}
+
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto' }}>
+    <AudioRecorder
+        onRecordingComplete={addAudioElement}
+        audioTrackConstraints={{
+          noiseSuppression: true,
+          echoCancellation: true,
+        }}
+        onNotAllowedOrFound={(err) => console.table(err)}
+        downloadOnSavePress={false}
+        downloadFileExtension="webm"
+        mediaRecorderOptions={{
+          audioBitsPerSecond: 128000,
+        }}
+      />
+    </div>
   </div>
 );
 }
