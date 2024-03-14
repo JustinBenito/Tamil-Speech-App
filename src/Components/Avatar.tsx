@@ -81,20 +81,27 @@ function Avatar(props: SVGProps<SVGSVGElement>){
 
       const sentences = [
         "அப்பா",
+        "அம்மா",
+        "பாப்பா",
+        "பால்",
+        "வீடு",
+        "புத்தகம்",
+        "குழந்தை",
+        "பூ"
        ]
 
        const renderAsrText = () => {
 
         asrText.split('').map((char, index) => {
-          if (char !== sentences[0].charAt(index)) {
-            console.log(char, sentences[0].charAt(index))
+          if (char !== sentence.charAt(index)) {
+            console.log(char, sentence.charAt(index))
            
           }
         })
         return (
           <h1 className="fonts text-4xl" style={{color: 'green', marginTop: '10px', fontSize: '32px', fontFamily: 'Noto Sans Tamil'}}>
             {asrText.split('').map((char, index) => (
-              <span key={index} style={{color: char !== sentences[0].charAt(index) ? 'red' : 'green', }}>
+              <span key={index} style={{color: char !== sentence.charAt(index) ? 'red' : 'green', }}>
                 {char}
               </span>
             ))}
@@ -155,11 +162,19 @@ function Avatar(props: SVGProps<SVGSVGElement>){
             });
        }
 
-       const handleClick = ()=>{
-        // const randomIndex = Math.floor(Math.random()*sentences.length);
-        setSelectedSentence(sentences[0]);
+       React.useEffect(()=>{
+
+         const setRandom = ()=>{
+          const randomIndex = Math.floor(Math.random()*sentences.length);
+          setSelectedSentence(sentences[randomIndex]);
+          
+          
+         }
+         setRandom()
+       },[])
+
+       const handleClick = ()=> {
         synthesizeSpeech()
-        
        }
        const handleVoiceChange= (event:React.ChangeEvent<HTMLSelectElement>)=>{
         setSelectedVoice(event.target.value);
@@ -184,15 +199,18 @@ function Avatar(props: SVGProps<SVGSVGElement>){
     formData.append('language', 'tamil');
     formData.append('vtt', 'true');
 
+    console.log("Audio recorded")
     try {
+      console.log("Is this even working")
+      console.log("Hey", process.env.REACT_APP_TOKEN)
       const response = await axios.post('https://asr.iitm.ac.in/api/asr/', formData, {
         headers: {
           Authorization: `Token ${process.env.REACT_APP_TOKEN}`,
           'Content-Type': 'multipart/form-data',
         },
       });
-      // console.log(response);
-      // console.log(response.data);
+      console.log(response);
+      console.log(response.data);
       setAsrText(response.data.transcript.trim());
     } catch (error) {
       console.error('Error uploading audio:', error);
@@ -234,7 +252,7 @@ function Avatar(props: SVGProps<SVGSVGElement>){
   </svg>
   <button className="button" onClick={handleClick}>Speak</button>
 
-  <h1 className="fonts text-4xl" style={{color: 'black', marginTop: '10px', fontSize: '32px'}}>{sentences[0]}</h1>
+  <h1 className="fonts text-4xl" style={{color: 'black', marginTop: '10px', fontSize: '32px'}}>{sentence}</h1>
   
   {/* {asrText ? <h1 className="text-4xl" style={{color: 'orange', marginTop: '10px', fontSize: '16px'}}>{asrText}</h1> : ''}
    */}
