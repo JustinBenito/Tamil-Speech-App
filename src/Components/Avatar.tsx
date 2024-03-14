@@ -213,7 +213,8 @@ function Avatar(props: SVGProps<SVGSVGElement>){
       console.log(response.data);
       setAsrText(response.data.transcript.trim());
     } catch (error) {
-      console.error('Error uploading audio:', error);
+      console.log("Hey", process.env.REACT_APP_TOKEN)
+      console.error('Error uploading audio:', process.env.REACT_APP_TOKEN, error);
     }}
         };
         sendAudioToAPI();
