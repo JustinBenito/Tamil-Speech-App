@@ -80,7 +80,7 @@ function Avatar(props: SVGProps<SVGSVGElement>){
       const [sentence,setSelectedSentence] = useState<string>("");
 
       const sentences = [
-        "சேர்ந்தார்",
+        "அப்பா",
        ]
 
        const renderAsrText = () => {
