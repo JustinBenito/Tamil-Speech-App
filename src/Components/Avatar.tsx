@@ -176,9 +176,9 @@ function Avatar(props: SVGProps<SVGSVGElement>){
        const handleClick = ()=> {
         synthesizeSpeech()
        }
-       const handleVoiceChange= (event:React.ChangeEvent<HTMLSelectElement>)=>{
-        setSelectedVoice(event.target.value);
-       }
+      //  const handleVoiceChange= (event:React.ChangeEvent<HTMLSelectElement>)=>{
+      //   setSelectedVoice(event.target.value);
+      //  }
 
 
        const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
