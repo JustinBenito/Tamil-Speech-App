@@ -14,27 +14,27 @@
 #     print(e)
 
 
-# login user 
-import requests
+# login user
+# import requests
 
-headersList = {}
-payload = {
-'email': "justinbenito2213005@ssn.edu.in",
-'password': "Justin@2005",
-}
-try:
-    response = requests.post('https://asr.iitm.ac.in/api/accounts/login/',
-    data=payload, headers=headersList)
-    print(response.json())
-except Exception as e:
-    print(e)
+# headersList = {}
+# payload = {
+# 'email': "justinbenito2213005@ssn.edu.in",
+# 'password': "Justin@2005",
+# }
+# try:
+#     response = requests.post('https://asr.iitm.ac.in/api/accounts/login/',
+#     data=payload, headers=headersList)
+#     print(response.json())
+# except Exception as e:
+#     print(e)
 
 
 # asr code
 
 # import requests
 # headersList = {
-# "Authorization": "Token 1b0fedcb19b28f1500918dea8847ad3f2864ab5b79221c8c98734218ecd57404"
+# "Authorization": "Token 177b6b879fc7fd42367088f0f6fa3a66dc2e535caece5368b1d46fcd786884ca"
 # }
 # files = {
 # 'file': open('tamil.mp3', 'rb'),
